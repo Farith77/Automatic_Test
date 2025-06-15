@@ -1,0 +1,24 @@
+{
+  "CP_01_02_InvalidEmail": {
+    "testId": "CP-01-02", 
+    "description": "Registro con correo no institucional",
+    "fullName": "José García",
+    "institution": "Universidad Test",
+    "country": "Perú",
+    "email": "jose@gmail.com",
+    "expectedMessage": "submitted successfully",
+    "shouldSucceed": true,
+    "comments": "Test con email no institucional"
+  },
+  "CP_01_03_EmptyField": {
+    "testId": "CP-01-03",
+    "description": "Registro fallido por campo obligatorio vacío",
+    "fullName": "",
+    "institution": "Universidad Test",
+    "country": "Perú", 
+    "email": "juan@unsa.edu.pe",
+    "expectedMessage": "required",
+    "shouldSucceed": false,
+    "comments": "Test con campo nombre vacío"
+  }
+}
