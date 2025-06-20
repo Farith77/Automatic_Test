@@ -47,18 +47,37 @@
         <classes>
             <class name="courses.CourseManagementTests">
                 <methods>
-                    <include name="testCoursesPanelDisplay"/>
-                    <include name="testCreateCourseWithValidData"/>
+                    <include name="testCoursesPanelDisplay"/>                    <include name="testCreateCourseWithValidData"/>
                     <include name="testCreateCourseWithEmptyId"/>
                     <include name="testCreateCourseWithEmptyName"/>
                     <include name="testCreateCourseWithDuplicateId"/>
-                    <include name="testAddStudentsWithValidData"/>
+                    <include name="testAddValidStudentsToActiveCourse"/>
                     <include name="testAddStudentWithDuplicateEmail"/>
-                    <include name="testAddStudentWithInvalidEmailFormat"/>
+                    <include name="testAddStudentWithInvalidEmail"/>
                     <include name="testAddStudentWithEmptyTeam"/>
                 </methods>
             </class>
         </classes>
     </test>
     
-</suite></suite>
+    <!-- RF-05: Feedback Session Management Tests -->
+    <test name="RF-05 Feedback Session Management Tests" parallel="false">
+        <classes>
+            <class name="feedback.FeedbackSessionManagementTests">
+                <methods>
+                    <include name="testCreateFeedbackSessionWithValidData"/>
+                    <include name="testSessionNameTooLong"/>
+                    <include name="testEmptySessionName"/>
+                    <include name="testInvalidDates"/>
+                    <include name="testEditSessionInstructions"/>
+                    <include name="testValidPointDistribution"/>
+                    <include name="testQuestionContentTooLong"/>
+                    <include name="testVisibilitySettings"/>
+                    <include name="testDeleteActiveSession"/>
+                    <include name="testCancelSessionDeletion"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+</suite>

@@ -1,20 +1,116 @@
 {
-  "CP_04_01_CoursesPanel": {
+  "CP_04_01_CoursesPanelDisplay": {
     "testId": "CP-04-01",
     "description": "Visualización exitosa del panel de cursos",
-    "userType": "Instructor",
-    "email": "ahilacondo@unsa.edu.pe",
-    "expectedTables": "Active courses, Archived courses, Deleted courses",
-    "shouldSucceed": true
+    "expectedTables": ["Active courses", "Archived courses", "Deleted courses"]
   },
   "CP_04_02_CreateCourse": {
     "testId": "CP-04-02",
     "description": "Crear curso con datos válidos",
-    "userType": "Instructor",
     "courseName": "Automatización de Pruebas",
-    "courseId": "AUTO-TEST-2025",
+    "courseId": "AUTO-TEST-2025", 
     "institute": "Universidad Nacional de San Agustín de Arequipa",
-    "expectedResult": "Se guarda el curso y se puede visualizar en la interfaz de cursos",
-    "shouldSucceed": true
+    "expectedMessage": "notificación de que el curso fue creado"
+  },
+  "CP_04_03_EmptyId": {
+    "testId": "CP-04-03",
+    "description": "Crear curso con ID vacío",
+    "courseName": "Curso Test",
+    "courseId": "",
+    "institute": "UNSA",
+    "expectedError": "No se habilita el botón add course"
+  },
+  "CP_04_04_EmptyName": {
+    "testId": "CP-04-04", 
+    "description": "Crear curso con nombre vacío",
+    "courseName": "",
+    "courseId": "TEST-2025",
+    "institute": "UNSA",
+    "expectedError": "No se habilita el botón add course"
+  },
+  "CP_04_05_DuplicateId": {
+    "testId": "CP-04-05",
+    "description": "Crear curso con ID duplicado",
+    "courseName": "Curso Duplicado",
+    "courseId": "AUTO-TEST-2025",
+    "institute": "UNSA", 
+    "expectedError": "notificación indicando que no se puede repetir el ID del curso"
+  },
+  "CP_04_01_01_ValidStudents": {
+    "testId": "CP-04-01-01",
+    "description": "Agregar estudiantes con datos válidos a curso activo",
+    "students": [
+      {
+        "name": "Juan Pérez",
+        "email": "juan.perez@unsa.edu.pe",
+        "team": "Team 1",
+        "section": "Section A"
+      }
+    ],
+    "expectedMessage": "mensaje de confirmación"
+  },
+  "CP_04_01_02_DuplicateEmail": {
+    "testId": "CP-04-01-02", 
+    "description": "Agregar estudiante con email duplicado",
+    "students": [
+      {
+        "name": "Pedro García",
+        "email": "juan.perez@unsa.edu.pe",
+        "team": "Team 2", 
+        "section": "Section A"
+      }
+    ],
+    "expectedError": "emails duplicados"
+  },
+  "CP_04_01_03_InvalidEmail": {
+    "testId": "CP-04-01-03",
+    "description": "Agregar estudiante con formato incorrecto en correo",
+    "students": [
+      {
+        "name": "Ana López",
+        "email": "email-invalido",
+        "team": "Team 1",
+        "section": "Section A"
+      }
+    ],
+    "expectedError": "mensaje indicando el error"
+  },
+  "CP_04_01_04_EmptyTeam": {
+    "testId": "CP-04-01-04",
+    "description": "Validación de campo obligatorio Team vacío", 
+    "students": [
+      {
+        "name": "Carlos Ruiz",
+        "email": "carlos.ruiz@unsa.edu.pe",
+        "team": "",
+        "section": "Section A"
+      }
+    ],
+    "expectedError": "mensaje indicando el error"
+  },
+  "CP_04_04_02_ArchiveArchived": {
+    "testId": "CP-04-04-02",
+    "description": "Curso ya archivado no puede archivarse",
+    "expectedResult": "La opción Archivar no está disponible"
+  },
+  "CP_04_05_01_DeleteActive": {
+    "testId": "CP-04-05-01", 
+    "description": "Eliminación lógica exitosa de curso activo",
+    "expectedResult": "Curso desaparece de Cursos activos y aparece en Cursos eliminados"
+  },
+  "CP_04_06_01_UnarchiveCourse": {
+    "testId": "CP-04-06-01",
+    "description": "Desarchivado exitoso de un curso archivado", 
+    "expectedResult": "Curso desaparece de Archivados y aparece en Cursos activos"
+  },
+  "CP_04_07_01_RestoreCourse": {
+    "testId": "CP-04-07-01",
+    "description": "Restauración exitosa de curso eliminado",
+    "expectedResult": "Curso desaparece de papelera y reaparece en estado anterior"
+  },
+  "CP_04_07_02_PermanentDelete": {
+    "testId": "CP-04-07-02",
+    "description": "Eliminación permanente exitosa del curso",
+    "expectedResult": "Curso desaparece de todo el sistema"
   }
 }

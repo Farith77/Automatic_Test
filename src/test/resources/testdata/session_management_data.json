@@ -1,0 +1,84 @@
+{
+  "CP_05_01_CreateSession": {
+    "testId": "CP-05-01",
+    "description": "Crear sesión de feedback con datos válidos",
+    "sessionName": "Evaluación Parcial 1",
+    "instructions": "Evalúe el desempeño de sus compañeros",
+    "submissionOpeningTime": "Fecha actual",
+    "submissionClosingTime": "Fecha actual + 7 días",
+    "gracePeriod": "15 minutos",
+    "expectedMessage": "The feedback session has been added.Click the \"Add New Question\" button below to begin adding questions for the feedback session."
+  },
+  "CP_05_02_SessionNameTooLong": {
+    "testId": "CP-05-02",
+    "description": "Validar exceso de caracteres en Session Name",
+    "sessionName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5",
+    "instructions": "Evalúe el desempeño de sus compañeros",
+    "expectedResult": "El frontend inhabilita que se coloquen más caracteres"
+  },
+  "CP_05_03_EmptySessionName": {
+    "testId": "CP-05-03",
+    "description": "Validar campo Session Name vacío",
+    "sessionName": "",
+    "instructions": "Evalúe el desempeño de sus compañeros",
+    "expectedResult": "El frontend inhabilita el botón de Create Feedback Session"
+  },
+  "CP_05_04_InvalidDates": {
+    "testId": "CP-05-04",
+    "description": "Validar fecha de cierre anterior a apertura",
+    "sessionName": "Sesión de prueba",
+    "submissionOpeningTime": "Thu, 26 Jun, 2025 23:59H",
+    "submissionClosingTime": "Tue, 17 Jun, 2025 23:59H",
+    "gracePeriod": "15 minutos",
+    "expectedResult": "El frontend inhabilita que se pueda seleccionar una fecha anterior"
+  },
+  "CP_05_05_EditInstructions": {
+    "testId": "CP-05-05",
+    "description": "Editar instrucciones en sesión activa",
+    "newInstructions": "Nuevas instrucciones para los estudiantes",
+    "expectedMessage": "The feedback session has been updated."
+  },
+  "CP_05_06_ValidPointDistribution": {
+    "testId": "CP-05-06",
+    "description": "Validar distribución correcta de puntos en preguntas",
+    "question": "How much work did each team member contribute? Distribute 100 points among them.",
+    "totalPoints": 100,
+    "feedbackPath": {
+      "whoGives": "Students in this course",
+      "whoReceives": "Other students in the same team"
+    },
+    "expectedMessage": "The changes to the question have been updated."
+  },
+  "CP_05_07_QuestionTooLong": {
+    "testId": "CP-05-07",
+    "description": "Validar exceso de caracteres en contenido de pregunta",
+    "questionContent": "Texto mayor a 2000 caracteres...",
+    "expectedResult": "0 characters left"
+  },
+  "CP_05_08_VisibilitySettings": {
+    "testId": "CP-05-08",
+    "description": "Verificar la configuración de opciones de visibilidad",
+    "visibilitySettings": {
+      "canSeeAnswer": true,
+      "canSeeGiverName": true,
+      "canSeeRecipientName": true,
+      "giverTeamMembers": [1, 2, 3],
+      "instructors": [1, 2, 3]
+    },
+    "expectedMessage": "The changes to the question have been updated."
+  },
+  "CP_05_09_DeleteSession": {
+    "testId": "CP-05-09",
+    "description": "Eliminar lógicamente una sesión de feedback activa",
+    "action": "Delete",
+    "confirmation": "YES",
+    "expectedResult": "Sesión cambia de estado activa a eliminada"
+  },
+  "CP_05_10_CancelDelete": {
+    "testId": "CP-05-10",
+    "description": "Cancelar eliminación de sesión",
+    "action": "Delete",
+    "confirmation": "NO",
+    "expectedResult": "Sesión mantiene estado activa, modal se cierra"
+  }
+}
