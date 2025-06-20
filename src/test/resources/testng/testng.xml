@@ -1,8 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="TEAMMATES Test Suite - Casos Específicos" verbose="1">
+<suite name="TEAMMATES Test Suite - Todos los Requerimientos" verbose="1">
     
-    <!-- RF-03: Session Panel Tests - Casos Específicos -->
+    <!-- RF-01: Instructor Registration Tests -->
+    <test name="RF-01 Instructor Registration Tests" parallel="false">
+        <classes>
+            <class name="authentication.InstructorRegistrationTests">
+                <methods>
+                    <include name="testValidEmailRegistration"/>
+                    <include name="testInvalidEmailRegistration"/>
+                    <include name="testEmptyRequiredFieldRegistration"/>
+                    <include name="testNameTooLongRegistration"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- RF-02: Login Tests -->
+    <test name="RF-02 Login Tests" parallel="false">
+        <classes>
+            <class name="authentication.LoginTests">
+                <methods>
+                    <include name="testSuccessfulInstructorLogin"/>
+                    <include name="testUnauthorizedAccountLogin"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- RF-03: Session Panel Tests -->
     <test name="RF-03 Session Panel Tests" parallel="false">
         <classes>
             <class name="sessions.SessionPanelTests">
@@ -16,16 +42,23 @@
         </classes>
     </test>
     
-    <!-- RF-04: Course Management Tests - Casos Específicos -->
+    <!-- RF-04: Course Management Tests -->
     <test name="RF-04 Course Management Tests" parallel="false">
         <classes>
             <class name="courses.CourseManagementTests">
                 <methods>
                     <include name="testCoursesPanelDisplay"/>
                     <include name="testCreateCourseWithValidData"/>
+                    <include name="testCreateCourseWithEmptyId"/>
+                    <include name="testCreateCourseWithEmptyName"/>
+                    <include name="testCreateCourseWithDuplicateId"/>
+                    <include name="testAddStudentsWithValidData"/>
+                    <include name="testAddStudentWithDuplicateEmail"/>
+                    <include name="testAddStudentWithInvalidEmailFormat"/>
+                    <include name="testAddStudentWithEmptyTeam"/>
                 </methods>
             </class>
         </classes>
     </test>
     
-</suite>
+</suite></suite>

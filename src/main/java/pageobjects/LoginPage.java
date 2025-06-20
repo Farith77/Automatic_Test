@@ -57,8 +57,7 @@ public class LoginPage extends BasePage {
         waitForElementVisible(loginDropdown);
         click(loginDropdown);
         waitFor(1);
-    }
-      /**
+    }    /**
      * Seleccionar Instructor Login
      */
     public void selectInstructorLogin() {
@@ -66,7 +65,9 @@ public class LoginPage extends BasePage {
         waitForElementVisible(instructorLoginOption);
         click(instructorLoginOption);
         waitFor(2);
-        performInstructorLogin();
+        
+        // Realizar proceso de login completo
+        handleInstructorLoginFlow();
     }
     
     /**
@@ -137,23 +138,22 @@ public class LoginPage extends BasePage {
         } catch (Exception e) {
             System.out.println("   - Continuando con verificación de resultados");
         }
-    }
-      /**
-     * Esperar el proceso de login y realizar autenticación
+    }    /**
+     * Esperar el proceso de login para estudiantes
      */
     public void waitForLoginProcess() {
         System.out.println("4. Realizando proceso de login con credenciales");
         
         try {
-            // Esperar a que aparezca la pantalla de Google OAuth
             waitFor(3);
             
             if (getCurrentUrl().contains("google.com") || getCurrentUrl().contains("accounts.google")) {
                 System.out.println("   - Detectada pantalla de Google OAuth");
-                performGoogleLogin();
+                String email = ConfigReader.getStudentEmail();
+                System.out.println("   - Usando email de estudiante: " + email);
+                performSingleGoogleLogin(email, false);
             } else {
-                // Si ya está logueado, verificar dashboard
-                System.out.println("   - Usuario ya autenticado, verificando dashboard");
+                System.out.println("   - Usuario ya autenticado");
             }
             
             waitFor(3);
@@ -218,8 +218,7 @@ public class LoginPage extends BasePage {
         } catch (Exception e) {
             System.out.println("   - Error en autenticación Google: " + e.getMessage());
         }
-    }
-      /**
+    }    /**
      * Realizar login como instructor
      */
     public void performInstructorLogin() {
@@ -227,7 +226,8 @@ public class LoginPage extends BasePage {
         
         try {
             waitFor(3);
-              if (getCurrentUrl().contains("google.com") || getCurrentUrl().contains("accounts.google")) {
+            
+            if (getCurrentUrl().contains("google.com") || getCurrentUrl().contains("accounts.google")) {
                 String email = ConfigReader.getInstructorEmail();
                 System.out.println("   - Usando email de instructor: " + email);
                 performGoogleLoginWithEmail(email);
@@ -586,6 +586,92 @@ public class LoginPage extends BasePage {
         } catch (Exception e) {
             System.out.println("   - Error al presionar Enter: " + e.getMessage());
             return false;
+        }
+    }
+    
+    /**
+     * Manejar flujo completo de login de instructor sin recursión
+     */
+    private void handleInstructorLoginFlow() {
+        System.out.println("4. Realizando proceso de login de instructor");
+        
+        try {
+            waitFor(3);
+            
+            // Verificar si necesitamos autenticación OAuth
+            if (getCurrentUrl().contains("google.com") || getCurrentUrl().contains("accounts.google")) {
+                System.out.println("   - Detectada pantalla de Google OAuth");
+                String email = ConfigReader.getInstructorEmail();
+                System.out.println("   - Usando email de instructor: " + email);
+                performSingleGoogleLogin(email, true);
+            } else {
+                System.out.println("   - Usuario instructor ya autenticado");
+            }
+            
+            waitFor(3);
+        } catch (Exception e) {
+            System.out.println("   - Error en login de instructor: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Realizar una sola vez el login de Google sin recursión
+     */
+    private void performSingleGoogleLogin(String email, boolean isInstructor) {
+        try {
+            System.out.println("   - Iniciando proceso de autenticación con: " + email);
+            
+            // Paso 1: Ingresar email
+            if (isElementPresent(googleEmailInput)) {
+                System.out.println("   - Campo de email encontrado, escribiendo...");
+                type(googleEmailInput, email);
+                waitFor(2);
+                
+                // Hacer clic en "Siguiente"
+                if (clickGoogleNextButton()) {
+                    System.out.println("   - Avanzando al paso de contraseña...");
+                    waitFor(3);
+                    
+                    // Paso 2: Ingresar contraseña
+                    if (isElementPresent(googlePasswordInput)) {
+                        System.out.println("   - Campo de contraseña encontrado");
+                        
+                        String password = isInstructor ? 
+                            ConfigReader.getInstructorPassword() : 
+                            ConfigReader.getStudentPassword();
+                        
+                        System.out.println("   - Usando credenciales de " + (isInstructor ? "instructor" : "estudiante"));
+                        type(googlePasswordInput, password);
+                        waitFor(2);
+                        
+                        // Enviar contraseña
+                        if (isElementPresent(googlePasswordNext)) {
+                            System.out.println("   - Enviando credenciales...");
+                            click(googlePasswordNext);
+                        } else if (isElementPresent(googleSignInButton)) {
+                            System.out.println("   - Haciendo clic en 'Sign In'");
+                            click(googleSignInButton);
+                        }
+                        
+                        // Esperar autenticación completa
+                        System.out.println("   - Esperando completar autenticación...");
+                        waitFor(5);
+                    } else {
+                        System.out.println("   - No se encontró campo de contraseña");
+                    }
+                } else {
+                    System.out.println("   - No se pudo avanzar al paso de contraseña");
+                }
+            } else if (isElementPresent(googleAccountOption)) {
+                System.out.println("   - Seleccionando cuenta existente");
+                click(googleAccountOption);
+                waitFor(3);
+            } else {
+                System.out.println("   - No se encontró formulario de login");
+            }
+            
+        } catch (Exception e) {
+            System.out.println("   - Error en autenticación: " + e.getMessage());
         }
     }
 }
