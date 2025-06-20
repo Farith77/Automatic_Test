@@ -104,3 +104,12 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Environment Variables and Sensitive Data
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+config.properties
+credentials.properties
