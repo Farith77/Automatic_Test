@@ -28,4 +28,8 @@ public class TestDataReader {
     public static boolean getBoolean(JsonObject data, String key) {
         return data.get(key).getAsBoolean();
     }
+    
+    public static int getInt(JsonObject data, String key) {
+        return data.get(key).getAsInt();
+    }
 }
