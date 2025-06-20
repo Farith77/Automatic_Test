@@ -61,4 +61,20 @@ public class ConfigReader {
     public static int getTimeout() {
         return Integer.parseInt(getProperty("browser.timeout"));
     }
+    
+    public static String getInstructorEmail() {
+        return getProperty("test.instructor.email");
+    }
+    
+    public static String getInstructorPassword() {
+        return getProperty("test.instructor.password");
+    }
+    
+    public static String getStudentEmail() {
+        return getProperty("test.student.email");
+    }
+    
+    public static String getStudentPassword() {
+        return getProperty("test.student.password");
+    }
 }
