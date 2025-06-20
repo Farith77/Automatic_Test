@@ -14,16 +14,15 @@
 Este anexo presenta la estrategia de automatización para los casos de prueba definidos en el plan principal utilizando Selenium WebDriver. La automatización mantiene la misma trazabilidad de requisitos funcionales y aplica las mismas técnicas de caja negra, pero ejecuta las validaciones de forma programática para mejorar la eficiencia y repetibilidad del proceso de testing.
 
 ### A.1.2 Alcance de la Automatización
-La automatización cubre el 80% de los casos de prueba manuales, priorizando aquellos que proporcionan mayor valor en términos de detección de regresiones y validación de funcionalidades críticas.
+La automatización cubre el 30% de los casos de prueba manuales más críticos, priorizando aquellos que proporcionan mayor valor en términos de detección de regresiones y validación de funcionalidades core.
 
-| Módulo | Casos Automatizables | Casos Totales | % Automatización | Justificación |
-|--------|---------------------|---------------|------------------|---------------|
-| Autenticación y Registro | 5 | 6 | 83.3% | Alta criticidad, flujos estables |
-| Funcionalidades de Estudiante | 4 | 6 | 66.7% | Interacciones complejas automatizables |
-| Gestión de Cursos | 35 | 44 | 79.5% | Operaciones CRUD repetitivas |
-| Gestión de Sesiones | 18 | 23 | 78.3% | Configuraciones múltiples |
-| Búsqueda y Recuperación | 22 | 26 | 84.6% | Validaciones de filtros |
-| **TOTAL** | **84** | **105** | **80%** | **Objetivo alcanzado** |
+| Módulo | Casos Automatizados | Casos Totales | % Automatización | Justificación |
+|--------|-------------------|---------------|------------------|---------------|
+| Autenticación y Registro | 6 | 20 | 30% | Funcionalidades críticas de acceso |
+| Funcionalidades de Estudiante | 4 | 15 | 26.7% | Flujos principales de feedback |
+| Gestión de Cursos | 12 | 40 | 30% | Operaciones CRUD fundamentales |
+| Gestión de Sesiones | 10 | 30 | 33.3% | Configuraciones esenciales |
+| **TOTAL** | **32** | **105** | **30.5%** | **Cobertura de casos críticos** |
 
 ---
 
@@ -105,21 +104,21 @@ src/
 - **Datos de Prueba**: `login_data.json`
 
 #### RF-03: Panel de Sesiones
-- **Casos Automatizados**: 6 casos de prueba
+- **Casos Automatizados**: 4 casos de prueba
 - **Cobertura**: Visualización de sesiones, envío de feedback, validaciones
 - **Archivo de Prueba**: `SessionPanelTests.java`
 - **Datos de Prueba**: `session_data.json`
 
 #### RF-04: Gestión de Cursos
-- **Casos Automatizados**: 15 casos de prueba
+- **Casos Automatizados**: 12 casos de prueba
 - **Cobertura**: CRUD completo de cursos, gestión de estudiantes, archivado/eliminación
 - **Archivo de Prueba**: `CourseManagementTests.java`
 - **Datos de Prueba**: `course_data.json`
 
 #### RF-05: Gestión de Sesiones de Feedback
-- **Casos Automatizados**: 8 casos de prueba
+- **Casos Automatizados**: 10 casos de prueba
 - **Cobertura**: Creación, configuración, y gestión de sesiones de feedback
-- **Archivo de Prueba**: `FeedbackSessionTests.java`
+- **Archivo de Prueba**: `FeedbackSessionManagementTests.java`
 - **Datos de Prueba**: `session_management_data.json`
 
 ---
@@ -394,6 +393,97 @@ mvn test -Dtest=CourseManagementTests
 
 ---
 
+## **RF-05: Gestión de Sesiones de Feedback**
+> **Archivo**: `src/test/java/feedback/FeedbackSessionManagementTests.java`  
+> **Datos**: `src/test/resources/testdata/session_management_data.json`
+
+### CP-05-01: Crear sesión de feedback con datos válidos
+**Descripción**: Verificar creación exitosa de sesión de feedback con todos los campos requeridos  
+**Flujo**: Login instructor → Sessions → Add Session → Llenar formulario válido → Submit → Verificar creación
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testCreateFeedbackSessionWithValidData
+```
+
+### CP-05-02: Validar exceso de caracteres en Session Name
+**Descripción**: Verificar validación de longitud máxima en el campo Session Name  
+**Flujo**: Add Session → Session Name > límite → Submit → Verificar error de validación
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testSessionNameExceedsCharacterLimit
+```
+
+### CP-05-03: Validar campo Session Name vacío
+**Descripción**: Verificar validación de campo Session Name obligatorio  
+**Flujo**: Add Session → Dejar Session Name vacío → Submit → Verificar error requerido
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testEmptySessionNameValidation
+```
+
+### CP-05-04: Validar fecha de cierre anterior a apertura
+**Descripción**: Verificar validación de fechas lógicas en configuración de sesión  
+**Flujo**: Add Session → End Date anterior a Start Date → Submit → Verificar error temporal
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testInvalidDateRangeValidation
+```
+
+### CP-05-05: Editar instrucciones en sesión activa
+**Descripción**: Verificar edición exitosa de instrucciones en sesión existente  
+**Flujo**: Seleccionar sesión → Edit → Modificar Instructions → Save → Verificar cambios
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testEditSessionInstructions
+```
+
+### CP-05-06: Validar distribución correcta de puntos en preguntas
+**Descripción**: Verificar configuración válida de preguntas con distribución de puntos  
+**Flujo**: Add Question → Configurar distribución → Verificar suma total → Submit
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testValidPointDistributionInQuestions
+```
+
+### CP-05-07: Validar exceso de caracteres en contenido de pregunta
+**Descripción**: Verificar validación de longitud en contenido de preguntas  
+**Flujo**: Add Question → Contenido > límite → Submit → Verificar error de longitud
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testQuestionContentExceedsLimit
+```
+
+### CP-05-08: Verificar configuración de opciones de visibilidad
+**Descripción**: Verificar configuración correcta de opciones de visibilidad de respuestas  
+**Flujo**: Edit Session → Visibility Settings → Configurar opciones → Save → Verificar estado
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testVisibilityOptionsConfiguration
+```
+
+### CP-05-09: Eliminar lógicamente una sesión de feedback activa
+**Descripción**: Verificar eliminación lógica de sesión sin pérdida de datos  
+**Flujo**: Seleccionar sesión → Delete → Confirmar → Verificar movimiento a Deleted
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testLogicalDeletionOfActiveSession
+```
+
+### CP-05-10: Cancelar eliminación de sesión
+**Descripción**: Verificar cancelación correcta del proceso de eliminación  
+**Flujo**: Seleccionar sesión → Delete → Cancel → Verificar sesión permanece activa
+
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests#testCancelSessionDeletion
+```
+
+**Ejecutar todos los casos de RF-05:**
+```bash
+mvn test -Dtest=FeedbackSessionManagementTests
+```
+
+---
+
 ## 🚀 Comandos de Ejecución
 
 ### **Ejecutar por Categorías**
@@ -416,6 +506,9 @@ mvn test -Dtest=SessionPanelTests
 
 # 🏫 Ejecutar solo tests de cursos (RF-04)  
 mvn test -Dtest=CourseManagementTests
+
+# 📋 Ejecutar solo tests de feedback sessions (RF-05)
+mvn test -Dtest=FeedbackSessionManagementTests
 
 # 📋 Ejecutar usando configuración TestNG XML
 mvn test -DsuiteXmlFile=src/test/resources/testng/testng.xml
@@ -444,6 +537,15 @@ mvn test -Dtest=SessionPanelTests#testSuccessfulFeedbackSubmission,SessionPanelT
 
 # 👀 Solo tests de visualización  
 mvn test -Dtest=SessionPanelTests#testViewSessionResponses,SessionPanelTests#testSessionWithoutVisibleResponses
+
+# 📋 Solo tests de gestión de sesiones de feedback (RF-05)
+mvn test -Dtest=FeedbackSessionManagementTests#testCreateFeedbackSessionWithValidData,FeedbackSessionManagementTests#testSessionNameExceedsCharacterLimit,FeedbackSessionManagementTests#testEmptySessionNameValidation
+
+# 🗂️ Solo tests de configuración de sesiones
+mvn test -Dtest=FeedbackSessionManagementTests#testInvalidDateRangeValidation,FeedbackSessionManagementTests#testEditSessionInstructions,FeedbackSessionManagementTests#testVisibilityOptionsConfiguration
+
+# 🗑️ Solo tests de eliminación de sesiones
+mvn test -Dtest=FeedbackSessionManagementTests#testLogicalDeletionOfActiveSession,FeedbackSessionManagementTests#testCancelSessionDeletion
 ```
 
 ### **Comandos de Desarrollo y Debug**
@@ -542,6 +644,36 @@ mvn test
 }
 ```
 
+### **Datos de Sesiones de Feedback** (`session_management_data.json`)
+```json
+{
+  "CP_05_01_ValidSession": {
+    "testId": "CP-05-01",
+    "sessionName": "Feedback Session - Automated Test",
+    "instructions": "Please provide honest feedback about your team members",
+    "startDate": "2025-06-20",
+    "endDate": "2025-06-27",
+    "expectedResult": "Session created successfully"
+  },
+  "CP_05_02_LongSessionName": {
+    "testId": "CP-05-02",
+    "sessionName": "Este es un nombre de sesión extremadamente largo que excede los límites permitidos por el sistema y debería generar un error de validación",
+    "expectedError": "Session name exceeds character limit"
+  },
+  "CP_05_03_EmptySessionName": {
+    "testId": "CP-05-03",
+    "sessionName": "",
+    "expectedError": "Session name is required"
+  },
+  "CP_05_04_InvalidDateRange": {
+    "testId": "CP-05-04",
+    "startDate": "2025-06-27",
+    "endDate": "2025-06-20",
+    "expectedError": "End date must be after start date"
+  }
+}
+```
+
 ---
 
 ## 🔧 Configuración Avanzada
@@ -573,6 +705,7 @@ Los archivos JSON en `src/test/resources/testdata/` pueden ser modificados para 
 - `login_data.json` - Datos para tests de autenticación (RF-02)
 - `session_data.json` - Datos para tests de sesiones (RF-03)
 - `course_data.json` - Datos para tests de cursos (RF-04)
+- `session_management_data.json` - Datos para tests de gestión de sesiones (RF-05)
 
 ---
 
@@ -718,8 +851,8 @@ mvn test-compile
 
 ### A.10.1 Cobertura de Automatización
 - **Total de Casos Manuales**: 105
-- **Casos Automatizados**: 84
-- **Porcentaje de Automatización**: 80%
+- **Casos Automatizados**: 32
+- **Porcentaje de Automatización**: 30.5%
 - **Casos Críticos Cubiertos**: 100%
 
 ### A.10.2 Distribución por Módulo
@@ -728,13 +861,13 @@ mvn test-compile
 |--------|-------------------|-----------------|------------|
 | RF-01: Registro | 4 | 8 min | Alta |
 | RF-02: Login | 2 | 4 min | Alta |
-| RF-03: Sesiones | 6 | 12 min | Media |
-| RF-04: Cursos | 15 | 30 min | Alta |
-| RF-05: Feedback | 8 | 16 min | Media |
+| RF-03: Sesiones | 4 | 8 min | Media |
+| RF-04: Cursos | 12 | 24 min | Alta |
+| RF-05: Feedback | 10 | 20 min | Media |
 
 ### A.10.3 Ejecución Completa
-**Tiempo Total Estimado**: 70 minutos  
-**Tiempo Óptimo (Paralelo)**: 25 minutos  
+**Tiempo Total Estimado**: 64 minutos  
+**Tiempo Óptimo (Paralelo)**: 20 minutos  
 **Recomendación**: Ejecución nocturna automatizada
 
 ---
