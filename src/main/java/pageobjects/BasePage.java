@@ -49,6 +49,19 @@ public class BasePage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
     
+    protected void waitForElementVisible(By locator, int timeoutSeconds) {
+        WebDriverWait customWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+        customWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+    
+    protected void waitFor(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    
     public void navigateToUrl(String url) {
         driver.get(url);
     }

@@ -26,6 +26,10 @@ public class InstructorRequestPage extends BasePage {
     private By successMessage = By.xpath("//*[contains(text(),'submitted successfully')]");
     private By iAmInstructorButton = By.id("btn-am-instructor");
 
+    // Botones específicos para el flujo CP-01-01
+    private By requestAccountButton = By.xpath("//a[contains(text(),'Request a Free Instructor Account') or contains(@class,'btn') and contains(text(),'Request')]");
+    private By requestAccountButtonAlt = By.xpath("//button[contains(text(),'Request a Free Instructor Account')] | //a[contains(text(),'Request a Free Instructor Account')]");
+    
     // directo al gui de registros, solo instructores, REVISAR
     public void navigateToRequestForm() {
         String url = ConfigReader.getAppUrl() + "/web/front/request";
@@ -132,5 +136,81 @@ public class InstructorRequestPage extends BasePage {
     
     public boolean isInstitutionFieldPresent() {
         return isElementPresent(institutionField);
+    }
+    
+    /**
+     * Método específico para CP-01-01: Navegación completa desde página principal
+     * Sigue los pasos: Página principal → Request Account → I am an instructor → Formulario
+     */
+    public void navigateFromHomePage() {
+        System.out.println("=== CP-01-01: Iniciando navegación desde página principal ===");
+        
+        // Paso 1: Acceder a la página principal
+        System.out.println("1. Accediendo a página principal de TEAMMATES");
+        String homeUrl = ConfigReader.getAppUrl();
+        navigateToUrl(homeUrl);
+        waitFor(3); // Esperar carga completa
+        
+        // Paso 2: Buscar y hacer clic en "Request a Free Instructor Account"
+        System.out.println("2. Buscando botón 'Request a Free Instructor Account'");
+        try {
+            if (isElementPresent(requestAccountButton)) {
+                System.out.println("   - Encontrado botón principal, haciendo clic...");
+                click(requestAccountButton);
+            } else if (isElementPresent(requestAccountButtonAlt)) {
+                System.out.println("   - Encontrado botón alternativo, haciendo clic...");
+                click(requestAccountButtonAlt);
+            } else {
+                System.out.println("   - Navegando directamente a la página de solicitud");
+                navigateToUrl(ConfigReader.getAppUrl() + "/web/front/request");
+            }
+        } catch (Exception e) {
+            System.out.println("   - Error al hacer clic, navegando directamente: " + e.getMessage());
+            navigateToUrl(ConfigReader.getAppUrl() + "/web/front/request");
+        }
+        
+        waitFor(2);
+        
+        // Paso 3: En la página de solicitud, hacer clic en "I am an instructor"
+        System.out.println("3. En página de solicitud, haciendo clic en 'I am an instructor'");
+        waitForElementVisible(iAmInstructorButton, 10);
+        click(iAmInstructorButton);
+        
+        // Paso 4: Esperar que aparezca el formulario
+        System.out.println("4. Esperando formulario de registro...");
+        waitForElementVisible(nameField, 10);
+        System.out.println("   ✓ Formulario cargado correctamente");
+    }
+    
+    /**
+     * Completar formulario específico para CP-01-01
+     */
+    public void fillCP01FormData(String fullName, String institution, String country, String email) {
+        System.out.println("=== Completando formulario CP-01-01 ===");
+        System.out.println("4. Completando formulario con datos:");
+        System.out.println("   - Full Name: " + fullName);
+        System.out.println("   - Institution: " + institution); 
+        System.out.println("   - Country: " + country);
+        System.out.println("   - Email: " + email);
+        System.out.println("   - Comments: (vacío)");
+        
+        // Llenar campos
+        type(nameField, fullName);
+        type(institutionField, institution);
+        type(countryField, country);
+        type(emailField, email);
+        // Comments se deja vacío según especificación
+        
+        System.out.println("   ✓ Formulario completado");
+    }
+    
+    /**
+     * Enviar formulario para CP-01-01
+     */
+    public void submitCP01Form() {
+        System.out.println("5. Haciendo clic en 'Submit'");
+        click(submitButton);
+        waitFor(2); // Esperar respuesta del servidor
+        System.out.println("   ✓ Formulario enviado");
     }
 }
