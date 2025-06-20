@@ -1,4 +1,4 @@
-# ANEXO: AUTOMATIZACIÓN CON SELENIUM
+# README AUTOMATIZACIÓN CON SELENIUM
 ## Framework de Pruebas Automatizadas para TEAMMATES
 
 **Proyecto**: Sistema TEAMMATES - Plan de Pruebas  
