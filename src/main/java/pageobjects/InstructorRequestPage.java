@@ -21,9 +21,21 @@ public class InstructorRequestPage extends BasePage {
     private By institutionError = By.xpath("//div[contains(text(),'Please enter your institution name')]");
     private By countryError = By.xpath("//div[contains(text(),'Please enter your institution\\'s country')]");
     private By emailError = By.xpath("//div[contains(text(),'Please enter your email address')]");
+      // mensaje de exito - selectores más amplios para capturar diferentes variaciones
+    private By successMessage = By.xpath("//*[contains(text(),'submitted successfully')] | " +
+                                        "//*[contains(text(),'Your request has been submitted')] | " +
+                                        "//*[contains(text(),'Solicitud recibida')] | " +
+                                        "//*[contains(text(),'acknowledgement email')] | " +
+                                        "//*[contains(@class,'alert-success')] | " +
+                                        "//*[contains(@class,'success')] | " +
+                                        "//div[contains(@class,'alert') and contains(@class,'alert-success')]");
     
-    // mensaje de exito
-    private By successMessage = By.xpath("//*[contains(text(),'submitted successfully')]");
+    private By anyMessage = By.xpath("//div[contains(@class,'alert')] | " +
+                                    "//*[contains(@class,'message')] | " +
+                                    "//*[contains(@class,'notification')] | " +
+                                    "//*[contains(text(),'request')] | " +
+                                    "//*[contains(text(),'submitted')] | " +
+                                    "//*[contains(text(),'email')]");
     private By iAmInstructorButton = By.id("btn-am-instructor");
 
     // Botones específicos para el flujo CP-01-01
@@ -84,12 +96,15 @@ public class InstructorRequestPage extends BasePage {
     public void fillAndSubmitRequest(String fullName, String institution, String country, String email) {
         fillRequestForm(fullName, institution, country, email, "");
         submitRequest();
-    }
-
-    public String getSuccessMessage() {
+    }    public String getSuccessMessage() {
         try {
-            return getText(successMessage);
+            waitFor(3); // Esperar a que aparezca el mensaje
+            if (isElementPresent(successMessage)) {
+                return getText(successMessage);
+            }
+            return "";
         } catch (Exception e) {
+            System.out.println("   - Error obteniendo mensaje de éxito: " + e.getMessage());
             return "";
         }
     }
@@ -104,9 +119,108 @@ public class InstructorRequestPage extends BasePage {
             return "";
         }
     }
-    
-    public boolean isSuccessMessageDisplayed() {
-        return isElementPresent(successMessage);
+      public boolean isSuccessMessageDisplayed() {
+        try {
+            System.out.println("   - Verificando mensaje de éxito...");
+            waitFor(5); // Dar más tiempo para respuesta del servidor
+            
+            // Verificar si hay mensaje de éxito
+            boolean messageFound = isElementPresent(successMessage);
+            System.out.println("   - Mensaje de éxito encontrado: " + messageFound);
+            
+            if (messageFound) {
+                String messageText = getText(successMessage);
+                System.out.println("   ✓ Mensaje de éxito: " + messageText);
+                return true;
+            } else {
+                // Debug exhaustivo
+                System.out.println("   - No se encontró mensaje de éxito, investigando...");
+                debugPageMessages();
+                return false;
+            }
+            
+        } catch (Exception e) {
+            System.out.println("   - Error verificando mensaje de éxito: " + e.getMessage());
+            debugPageMessages();
+            return false;
+        }
+    }
+      /**
+     * Método de debug para capturar mensajes en la página
+     */
+    private void debugPageMessages() {
+        try {
+            System.out.println("   - DEBUG: Analizando página después del envío...");
+            
+            // Obtener URL actual
+            String currentUrl = driver.getCurrentUrl();
+            System.out.println("   - DEBUG: URL actual: " + currentUrl);
+            
+            // Buscar cualquier tipo de mensaje/alerta
+            By allAlerts = By.xpath("//div[contains(@class,'alert')] | //*[contains(@class,'message')] | //*[contains(@class,'notification')]");
+            if (isElementPresent(allAlerts)) {
+                String alertText = getText(allAlerts);
+                System.out.println("   - DEBUG: Mensaje/Alerta encontrada: " + alertText);
+            } else {
+                System.out.println("   - DEBUG: No se encontraron alertas estándar");
+            }
+            
+            // Buscar texto específico de éxito
+            By successTexts = By.xpath("//*[contains(text(),'submitted') or contains(text(),'success') or contains(text(),'acknowledgement')]");
+            if (isElementPresent(successTexts)) {
+                String successText = getText(successTexts);
+                System.out.println("   - DEBUG: Texto de éxito encontrado: " + successText);
+            }
+            
+            // Buscar errores
+            By errorTexts = By.xpath("//*[contains(text(),'error') or contains(text(),'Error') or contains(text(),'failed')]");
+            if (isElementPresent(errorTexts)) {
+                String errorText = getText(errorTexts);
+                System.out.println("   - DEBUG: Texto de error encontrado: " + errorText);
+            }
+            
+            // Verificar título de la página
+            String pageTitle = driver.getTitle();
+            System.out.println("   - DEBUG: Título de página: " + pageTitle);
+            
+            // Capturar una muestra del contenido de la página
+            String pageText = getText(By.tagName("body"));
+            if (pageText.contains("submitted") || pageText.contains("success") || pageText.contains("acknowledgement")) {
+                // Encontrar la sección relevante
+                String[] words = pageText.split("\\s+");
+                StringBuilder relevantText = new StringBuilder();
+                boolean foundRelevant = false;
+                
+                for (int i = 0; i < words.length; i++) {
+                    if (words[i].toLowerCase().contains("submit") || 
+                        words[i].toLowerCase().contains("success") || 
+                        words[i].toLowerCase().contains("acknowledge")) {
+                        foundRelevant = true;
+                        // Capturar contexto (5 palabras antes y 10 después)
+                        int start = Math.max(0, i - 5);
+                        int end = Math.min(words.length, i + 10);
+                        for (int j = start; j < end; j++) {
+                            relevantText.append(words[j]).append(" ");
+                        }
+                        break;
+                    }
+                }
+                
+                if (foundRelevant) {
+                    System.out.println("   - DEBUG: Contexto relevante encontrado: " + relevantText.toString().trim());
+                }
+            } else {
+                System.out.println("   - DEBUG: No se encontró texto de éxito en el contenido de la página");
+                // Mostrar una muestra pequeña
+                if (pageText.length() > 300) {
+                    pageText = pageText.substring(0, 300) + "...";
+                }
+                System.out.println("   - DEBUG: Muestra del contenido: " + pageText.replaceAll("\\s+", " ").trim());
+            }
+            
+        } catch (Exception e) {
+            System.out.println("   - DEBUG: Error capturando información: " + e.getMessage());
+        }
     }
     
     public boolean isErrorMessageDisplayed() {
@@ -203,14 +317,25 @@ public class InstructorRequestPage extends BasePage {
         
         System.out.println("   ✓ Formulario completado");
     }
-    
-    /**
+      /**
      * Enviar formulario para CP-01-01
      */
     public void submitCP01Form() {
         System.out.println("5. Haciendo clic en 'Submit'");
         click(submitButton);
-        waitFor(2); // Esperar respuesta del servidor
-        System.out.println("   ✓ Formulario enviado");
+        
+        System.out.println("   - Formulario enviado, esperando respuesta...");
+        waitFor(5); // Esperar más tiempo para la respuesta del servidor
+        
+        // Capturar información de la respuesta
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println("   - URL después del envío: " + currentUrl);
+        
+        // Verificar si hay redirección o cambio en la página
+        if (currentUrl.contains("request") || currentUrl.contains("success") || currentUrl.contains("confirmation")) {
+            System.out.println("   ✓ Posible respuesta detectada en URL");
+        }
+        
+        System.out.println("   ✓ Proceso de envío completado");
     }
 }

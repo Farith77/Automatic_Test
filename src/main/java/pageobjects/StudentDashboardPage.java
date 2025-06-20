@@ -183,11 +183,10 @@ public class StudentDashboardPage extends BasePage {
             return false;
         }
     }
-    
-    /**
+      /**
      * Obtener texto de la página actual
      */
-    private String getCurrentPageText() {
+    public String getCurrentPageText() {
         try {
             return getText(By.tagName("body"));
         } catch (Exception e) {

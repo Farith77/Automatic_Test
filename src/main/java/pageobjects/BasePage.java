@@ -62,6 +62,31 @@ public class BasePage {
         }
     }
     
+    protected boolean isElementEnabled(By locator) {
+        try {
+            WebElement element = driver.findElement(locator);
+            return element.isEnabled();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    protected String getElementText(By locator) {
+        try {
+            WebElement element = driver.findElement(locator);
+            return element.getText();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+      public String getCurrentPageText() {
+        try {
+            return driver.getPageSource();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+    
     public void navigateToUrl(String url) {
         driver.get(url);
     }
