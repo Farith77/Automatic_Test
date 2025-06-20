@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="TEAMMATES Automated Tests" verbose="1">
-    <test name="Registration Tests" parallel="false">
+<suite name="TEAMMATES Test Suite - Casos Específicos" verbose="1">
+    
+    <!-- RF-03: Session Panel Tests - Casos Específicos -->
+    <test name="RF-03 Session Panel Tests" parallel="false">
         <classes>
-            <class name="authentication.RegistrationTests"/>
+            <class name="sessions.SessionPanelTests">
+                <methods>
+                    <include name="testViewSessionResponses"/>
+                    <include name="testSessionWithoutVisibleResponses"/>
+                    <include name="testSuccessfulFeedbackSubmission"/>
+                    <include name="testFailedFeedbackSubmissionInvalidSum"/>
+                </methods>
+            </class>
         </classes>
     </test>
+    
+    <!-- RF-04: Course Management Tests - Casos Específicos -->
+    <test name="RF-04 Course Management Tests" parallel="false">
+        <classes>
+            <class name="courses.CourseManagementTests">
+                <methods>
+                    <include name="testCoursesPanelDisplay"/>
+                    <include name="testCreateCourseWithValidData"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
 </suite>

@@ -1,24 +1,44 @@
-{
-  "CP_01_02_InvalidEmail": {
+{  "CP_01_01_ValidEmail": {
+    "testId": "CP-01-01",
+    "description": "Registro exitoso con correo válido",
+    "fullName": "Andre Hilacondo Begazo",
+    "institution": "Universidad Nacional de San Agustín de Arequipa",
+    "country": "Perú",
+    "email": "juan@unsa.edu.pe",
+    "expectedMessage": "Solicitud recibida. Se enviará confirmación en 24 horas",
+    "shouldSucceed": true,
+    "comments": ""
+  },  "CP_01_02_InvalidEmail": {
     "testId": "CP-01-02", 
-    "description": "Registro con correo no institucional",
-    "fullName": "José García",
-    "institution": "Universidad Test",
+    "description": "Registro fallido con correo no autorizado",
+    "fullName": "Andre Hilacondo Begazo",
+    "institution": "Universidad Nacional de San Agustín de Arequipa",
     "country": "Perú",
     "email": "jose@gmail.com",
-    "expectedMessage": "submitted successfully",
-    "shouldSucceed": true,
-    "comments": "Test con email no institucional"
+    "expectedMessage": "Correo no autorizado para registro",
+    "shouldSucceed": false,
+    "comments": ""
   },
   "CP_01_03_EmptyField": {
     "testId": "CP-01-03",
     "description": "Registro fallido por campo obligatorio vacío",
     "fullName": "",
-    "institution": "Universidad Test",
+    "institution": "Universidad Nacional de San Agustín de Arequipa",
     "country": "Perú", 
-    "email": "juan@unsa.edu.pe",
-    "expectedMessage": "required",
+    "email": "jose@unsa.edu.pe",
+    "expectedMessage": "Complete todos los campos obligatorios",
     "shouldSucceed": false,
-    "comments": "Test con campo nombre vacío"
+    "comments": ""
+  },
+  "CP_01_04_NameTooLong": {
+    "testId": "CP-01-04",
+    "description": "Registro fallido por nombre demasiado largo",
+    "fullName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "institution": "Universidad Nacional de San Agustín de Arequipa",
+    "country": "Perú",
+    "email": "jose@unsa.edu.pe",
+    "expectedMessage": "El campo nombre excede la longitud permitida",
+    "shouldSucceed": false,
+    "comments": ""
   }
 }

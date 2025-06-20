@@ -1,0 +1,62 @@
+{
+  "CP_03_01_SessionPanel": {
+    "testId": "CP-03-01",
+    "description": "Visualización correcta del panel de sesiones",
+    "userType": "Student",
+    "email": "ahilacondo@unsa.edu.pe",
+    "expectedCourse": "Sample Course 101",
+    "expectedColumns": "Session Name, Deadline, Submissions, Responses, Action(s)",
+    "expectedSessions": 3
+  },
+  "CP_03_02_EmptyPanel": {
+    "testId": "CP-03-02",
+    "description": "Panel vacío sin sesiones disponibles",
+    "userType": "Student",
+    "email": "student.empty@unsa.edu.pe",
+    "expectedMessage": "No sessions available",
+    "shouldSucceed": true
+  },
+  "CP_03_01_01_ViewResponses": {
+    "testId": "CP-03-01-01",
+    "description": "Visualización de respuestas recibidas",
+    "userType": "Student",
+    "sessionName": "First team feedback session (percentage-based)",
+    "expectedContent": "Feedback Session Results with course information and questions",
+    "shouldSucceed": true
+  },
+  "CP_03_01_02_NoVisibleResponses": {
+    "testId": "CP-03-01-02",
+    "description": "Sesión sin respuestas visibles al estudiante",
+    "userType": "Student",
+    "sessionName": "feedback session with published responses",
+    "expectedMessage": "No hay respuestas disponibles para esta sesión",
+    "shouldSucceed": true
+  },
+  "CP_03_02_01_ValidPercentages": {
+    "testId": "CP-03-02-01",
+    "description": "Envío exitoso de feedback con porcentajes válidos",
+    "userType": "Student",
+    "expectedTotal": 400,
+    "studentPoints": {
+      "Andre (Student)": 100,
+      "Charlie Davis (Student)": 100,
+      "Francis Gabriel (Student)": 100,
+      "Gene Hudson (Student)": 100
+    },
+    "shouldSucceed": true
+  },
+  "CP_03_02_02_InvalidSum": {
+    "testId": "CP-03-02-02",
+    "description": "Envío fallido por suma incorrecta de porcentajes",
+    "userType": "Student",
+    "invalidTotal": 420,
+    "extraPoints": 20,
+    "studentPoints": {
+      "Andre (Student)": 100,
+      "Charlie Davis (Student)": 100,
+      "Francis Gabriel (Student)": 100,
+      "Gene Hudson (Student)": 120
+    },
+    "shouldSucceed": false
+  }
+}
