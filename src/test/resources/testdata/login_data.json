@@ -1,0 +1,18 @@
+{
+  "CP_02_01_ValidInstructor": {
+    "testId": "CP-02-01",
+    "description": "Inicio de sesión exitoso con cuenta registrada",
+    "userType": "Instructor",
+    "email": "ahilacondo@unsa.edu.pe",
+    "expectedResult": "Acceso exitoso al panel principal",
+    "shouldSucceed": true
+  },
+  "CP_02_02_UnauthorizedAccount": {
+    "testId": "CP-02-02",
+    "description": "Denegación de acceso con cuenta no registrada",
+    "userType": "Instructor",
+    "email": "ehilacondob@unsa.edu.pe",
+    "expectedMessage": "Cuenta no autorizada",
+    "shouldSucceed": false
+  }
+}

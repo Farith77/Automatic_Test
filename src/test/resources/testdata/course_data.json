@@ -1,0 +1,20 @@
+{
+  "CP_04_01_CoursesPanel": {
+    "testId": "CP-04-01",
+    "description": "Visualización exitosa del panel de cursos",
+    "userType": "Instructor",
+    "email": "ahilacondo@unsa.edu.pe",
+    "expectedTables": "Active courses, Archived courses, Deleted courses",
+    "shouldSucceed": true
+  },
+  "CP_04_02_CreateCourse": {
+    "testId": "CP-04-02",
+    "description": "Crear curso con datos válidos",
+    "userType": "Instructor",
+    "courseName": "Automatización de Pruebas",
+    "courseId": "AUTO-TEST-2025",
+    "institute": "Universidad Nacional de San Agustín de Arequipa",
+    "expectedResult": "Se guarda el curso y se puede visualizar en la interfaz de cursos",
+    "shouldSucceed": true
+  }
+}
